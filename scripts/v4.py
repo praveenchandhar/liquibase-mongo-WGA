@@ -331,7 +331,7 @@ def create_pull_request(repo_name, branch_name, changeset_file_path, js_file_pat
         ref = repo.create_git_ref(ref=f"refs/heads/{branch_name}", sha=main_branch.commit.sha)
 
         # Add / commit the file to the branch
-        file_path_in_repo = f"json_changesets/{os.path.basename(changeset_file_path)}"
+        file_path_in_repo = f"xml_changesets/{os.path.basename(changeset_file_path)}"
         
         try:
             existing_file = repo.get_contents(file_path_in_repo, ref=branch_name)
@@ -402,7 +402,7 @@ if __name__ == "__main__":
         print(f"Generating XML for version: {version}")
         xml_content = generate_liquibase_xml(version, operations, author, context)
         
-        changeset_file_path = f"json_changesets/{version}.xml"
+        changeset_file_path = f"xml_changesets/{version}.xml"
         print(f"Writing XML to: {changeset_file_path}")
         write_to_file(xml_content, changeset_file_path)
         
