@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mongodb="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet id="3" author="praveenchandhar" context="liquibase_test_new">
+        <mongodb:runCommand>
+            <mongodb:command><![CDATA[
+            {
+                "update": "dp_sc_dxp_catalog_data_provider",
+                "updates": [
+                    {
+                        "q": {"providerType" : "HRIS_HIBOB"},
+                        "u": { 
+    $addToSet: { 
+      "customConfigs.allowReverseSync": "658e26dd6409d6d3d87a85be" 
+    } 
+  },
+                        "multi": false
+                    }
+                ]
+            }
+            ]]></mongodb:command>
+        </mongodb:runCommand>
+    </changeSet>
+</databaseChangeLog>
