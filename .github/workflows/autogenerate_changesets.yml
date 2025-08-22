@@ -155,8 +155,8 @@ jobs:
       - name: Create output directory
         if: env.has_js_file == 'true'
         run: |
-          echo "Creating json_changesets directory..."
-          mkdir -p json_changesets
+          echo "Creating xml_changesets directory..."
+          mkdir -p xml_changesets
           echo "✅ Directory created successfully"
 
       # Step 6: Set Up Python Environment (only if we have a JS file)
@@ -220,7 +220,7 @@ jobs:
         run: |
           echo "=== Verifying Generated XML ==="
           VERSION=$(basename ${{ env.js_file }} .js)
-          XML_FILE="json_changesets/${VERSION}.xml"
+          XML_FILE="xml_changesets/${VERSION}.xml"
           
           if [ -f "$XML_FILE" ]; then
             echo "✅ XML file generated successfully: $XML_FILE"
@@ -240,8 +240,8 @@ jobs:
             fi
           else
             echo "❌ XML file was not generated: $XML_FILE"
-            echo "Checking json_changesets directory contents:"
-            ls -la json_changesets/ 2>/dev/null || echo "json_changesets directory does not exist"
+            echo "Checking xml_changesets directory contents:"
+            ls -la xml_changesets/ 2>/dev/null || echo "xml_changesets directory does not exist"
             exit 1
           fi
 
@@ -254,7 +254,7 @@ jobs:
           echo "=== Posting Success Comment on Original PR ==="
           
           VERSION=$(basename ${{ env.js_file }} .js)
-          XML_FILE="json_changesets/${VERSION}.xml"
+          XML_FILE="xml_changesets/${VERSION}.xml"
           
           # Count operations in the XML
           OPERATION_COUNT=$(grep -c '<changeSet id=' "$XML_FILE" 2>/dev/null || echo "0")
@@ -267,7 +267,7 @@ jobs:
 
           ### 📋 Summary
           - **Source File:** `${{ env.js_file }}`
-          - **Generated XML:** `json_changesets/${VERSION}.xml`
+          - **Generated XML:** `xml_changesets/${VERSION}.xml`
           - **Operations:** ${OPERATION_COUNT} changeset(s)
           - **Context:** `liquibase_test`
           - **Generated PR:** ${{ env.changeset_pr_url }}
@@ -339,7 +339,7 @@ jobs:
           if [ "${{ env.has_js_file }}" = "true" ]; then
             echo "✅ JS file detected: ${{ env.js_file }}"
             VERSION=$(basename ${{ env.js_file }} .js)
-            XML_FILE="json_changesets/${VERSION}.xml"
+            XML_FILE="xml_changesets/${VERSION}.xml"
             if [ -f "$XML_FILE" ]; then
               echo "✅ XML changeset generated: $XML_FILE"
               if [ "${{ env.changeset_created }}" = "true" ]; then
