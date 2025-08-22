@@ -3,7 +3,7 @@ name: Changeset Applied Notification
 on:
   pull_request:
     paths:
-      - json_changesets/**
+      - xml_changesets/**
     types:
       - closed # Trigger only when PR is closed (and potentially merged)
 
@@ -31,11 +31,11 @@ jobs:
           BASE_SHA=${{ github.event.pull_request.base.sha }}
           
           # Get XML files from the merge
-          XML_FILES=$(git diff-tree --no-commit-id --name-only -r $MERGE_COMMIT_SHA 2>/dev/null | { grep 'json_changesets/.*\.xml' || true; })
+          XML_FILES=$(git diff-tree --no-commit-id --name-only -r $MERGE_COMMIT_SHA 2>/dev/null | { grep 'xml_changesets/.*\.xml' || true; })
           
           if [ -z "$XML_FILES" ]; then
             # Fallback: check diff between base and head
-            XML_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA 2>/dev/null | { grep 'json_changesets/.*\.xml' || true; })
+            XML_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA 2>/dev/null | { grep 'xml_changesets/.*\.xml' || true; })
           fi
           
           if [ -z "$XML_FILES" ]; then
