@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mongodb="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!-- VALIDATION REPORT -->
+    <!-- ⚠️ WARNINGS: -->
+    <!-- ================================================== -->
+    <!-- 1. Header: Missing recommended header field: @author -->
+    <!-- 2. Header: Missing recommended header field: @description -->
+    <!-- 3. Header: Missing recommended header field: @version -->
+    <!-- ✅ Liquibase XML generated successfully, but please review warnings above. -->
+    <!-- END VALIDATION REPORT -->
+
+    <changeSet id="1.1" author="praveenchandhar" context="liquibase_test_new">
+        <!-- INSERTMANY operation on san_mateo (from line 1) -->
+        <mongodb:insertMany collectionName="san_mateo">
+            <mongodb:documents><![CDATA[
+            [ { name: "John Doe", email: "john@example.com", age: 30 }, { name: "Jane Smith", email: "jane@example.com", age: 25 } ]
+            ]]></mongodb:documents>
+        </mongodb:insertMany>
+    </changeSet>
+    <changeSet id="1.2" author="praveenchandhar" context="liquibase_test_new">
+        <!-- UPDATEONE operation on san_mateo (from line 6) -->
+        <mongodb:runCommand>
+            <mongodb:command><![CDATA[
+            {
+                "update": "san_mateo",
+                "updates": [
+                    {
+                        "q": { email: "john@example.com" },
+                        "u": { $set: { age: 31, lastUpdated: ISODate() } },
+                        "multi": false
+                    }
+                ]
+            }
+            ]]></mongodb:command>
+        </mongodb:runCommand>
+    </changeSet>
+    <changeSet id="1.3" author="praveenchandhar" context="liquibase_test_new">
+        <!-- DELETEMANY operation on san_mateo (from line 11) -->
+        <mongodb:runCommand>
+            <mongodb:command><![CDATA[
+            {
+                "delete": "san_mateo",
+                "deletes": [
+                    {
+                        "q": { age: { $lt: 18 } },
+                        "limit": 0
+                    }
+                ]
+            }
+            ]]></mongodb:command>
+        </mongodb:runCommand>
+    </changeSet>
+</databaseChangeLog>
