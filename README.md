@@ -11,6 +11,8 @@
 | replaceOne            | db.users.replaceOne({_id: ObjectId("123")}, {name: "John Updated"})      | ✅ YES    |
 | deleteOne             | db.users.deleteOne({email: "user@example.com"})                          | ✅ YES    |
 | deleteMany            | db.users.deleteMany({status: "inactive"})                                | ✅ YES    |
+| find                  | db.users.find({status: "active"})                                        | ✅ YES    |
+| findOne               | db.users.findOne({email: "john@example.com"})                            | ✅ YES    |
 | createIndex           | db.users.createIndex({email: 1}, {unique: true})                         | ✅ YES    |
 | dropIndex (by name)   | db.users.dropIndex("email_index")                                        | ✅ YES    |
 | dropIndex (by keys)   | db.users.dropIndex({email: 1})                                           | ✅ YES    |
@@ -24,8 +26,6 @@
 
 | Command/Operation        | Reference Query                                                        | Supported |
 |--------------------------|------------------------------------------------------------------------|-----------|
-| find                     | db.users.find({status: "active"})                                     | ❌ NO     |
-| findOne                  | db.users.findOne({email: "john@example.com"})                         | ❌ NO     |
 | findOneAndUpdate         | db.users.findOneAndUpdate({email: "john@example.com"}, {$set: {age: 31}}) | ❌ NO     |
 | findOneAndDelete         | db.users.findOneAndDelete({email: "john@example.com"})                | ❌ NO     |
 | findOneAndReplace        | db.users.findOneAndReplace({_id: ObjectId("123")}, {name: "New"})     | ❌ NO     |
@@ -77,10 +77,31 @@
 
 ## 📖 Sample Queries for Copy-Paste
 
-### Insert Operations
+### Read Operations
 ```javascript
 // context: dev
 
+// Find multiple documents
+db.users.find({
+  status: "active",
+  age: {$gte: 18}
+});
+
+// Find with projection
+db.users.find(
+  {status: "active"},
+  {name: 1, email: 1, _id: 0}
+);
+
+// Find single document
+db.users.findOne({email: "john@example.com"});
+
+// Find with sorting and limit
+db.users.find({status: "active"}).sort({createdAt: -1}).limit(10);
+```
+
+### Insert Operations
+```javascript
 // Insert single document
 db.users.insertOne({
   name: "John Doe",
@@ -165,8 +186,8 @@ db.getCollection("user-profiles").insertOne({
 ---
 
 **📊 Summary Statistics:**
-- ✅ **13 Supported Operations** - All CRUD and collection management
-- ❌ **18 Unsupported Operations** - Read operations and deprecated methods  
+- ✅ **15 Supported Operations** - CRUD, read operations, and collection management
+- ❌ **16 Unsupported Operations** - Complex operations and deprecated methods  
 - ❌ **6 Unsupported JavaScript Features** - Dynamic code execution
 
-**🔑 Key Rule:** Only static MongoDB write operations are supported. No variables, functions, or dynamic code execution.
+**🔑 Key Rule:** Static MongoDB operations are supported including read operations. No variables, functions, or dynamic code execution.
